@@ -1,0 +1,21 @@
+package com.romanshvets.resource.exception;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Map;
+
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = true)
+public class ResourceValidationException extends ResourceSimpleException {
+
+    private final Map<String, String> details;
+
+    public ResourceValidationException(int errorCode, String errorMessage, Map<String, String> details) {
+        super(errorCode, errorMessage);
+
+        this.details = details;
+    }
+}
