@@ -1,5 +1,7 @@
 package com.romanshvets.resource.utils;
 
+import org.apache.tika.Tika;
+
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
@@ -10,6 +12,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ResourceValidationUtils {
+
+    public static String validateContentType(String contentType) {
+        if (!"audio/mpeg".equalsIgnoreCase(contentType)) {
+            return String.format("Invalid file format: %s. Only MP3 files are allowed", contentType);
+        }
+
+        return null;
+    }
+
+    public static String validateStreamIsMP3(byte[] content) {
+        return validateContentType(new Tika().detect(content));
+    }
 
     public static Map<String, String> validateParams(Map<String, Object> params) {
         if (params == null) {

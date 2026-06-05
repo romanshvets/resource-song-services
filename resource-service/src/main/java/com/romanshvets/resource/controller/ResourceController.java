@@ -1,17 +1,17 @@
 package com.romanshvets.resource.controller;
 
+import com.romanshvets.resource.model.ResourceDto;
 import com.romanshvets.resource.service.ResourceService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/resources")
@@ -20,20 +20,19 @@ public class ResourceController {
 
     private final ResourceService resourceService;
 
-    @PostMapping(consumes = "audio/mpeg", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Long>> createResource(InputStream inputStream) {
-//        var songId = this.resourceService.createResource(params);
-//
-//        return ResponseEntity.ok(Collections.singletonMap("id", songId));
-        return ResponseEntity.ok(Collections.emptyMap());
+    @PostMapping(produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Long>> createResource(HttpServletRequest request) {
+        var resourceId = this.resourceService.createResource(request);
+
+        return ResponseEntity.ok(Collections.singletonMap("id", resourceId));
     }
-//
-//    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-//    public ResponseEntity<SongDto> getSong(@PathVariable("id") String id) {
-//        var song = this.songService.getSong(id);
-//
-//        return ResponseEntity.ok(song);
-//    }
+
+    @GetMapping(value = "/{id}", produces = "audio/mpeg")
+    public ResponseEntity<byte[]> getResource(@PathVariable("id") String id) {
+        var resourceContent = this.resourceService.getResource(id);
+
+        return ResponseEntity.ok(resourceContent);
+    }
 //
 //    @DeleteMapping(produces = APPLICATION_JSON_VALUE)
 //    public ResponseEntity<Map<String, Set<Long>>> deleteSongs(@RequestParam("id") String ids) {
