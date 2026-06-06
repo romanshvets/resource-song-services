@@ -20,8 +20,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.romanshvets.resource.utils.ResourceMetadataUtils.convertMetadataToParams;
 import static com.romanshvets.resource.utils.ResourceValidationUtils.*;
@@ -79,20 +80,18 @@ public class ResourceService {
         return resource.get().getContent();
     }
 
+    @Transactional
     public Set<Long> deleteResources(String ids) {
-//        var validationError = validateIdsParam(ids);
-//        if (validationError != null) {
-//            throw new SongSimpleException(400, validationError);
-//        }
-//
-//        var idsToDelete = Arrays.stream(ids.split(","))
-//                .map(Long::parseLong)
-//                .collect(Collectors.toSet());
-//
-//        return repository.deleteByIdIn(idsToDelete)
-//                .stream()
-//                .map(SongDto::getId).collect(Collectors.toSet());
-        return Collections.emptySet();
+        var validationError = validateIdsParam(ids);
+        if (validationError != null) {
+            throw new ResourceSimpleException(400, validationError);
+        }
+
+        var idsToDelete = Arrays.stream(ids.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toSet());
+
+        return deleteResourceAndMetadata(idsToDelete);
     }
 
     @Transactional
@@ -112,9 +111,29 @@ public class ResourceService {
                 .toBodilessEntity();
 
         if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new ResourceSimpleException(400, "Failed to save resource metadata");
+            throw new ResourceSimpleException(400, String.format("Failed to save resource metadata for ID %s", resource.getId()));
         }
 
         return resource.getId();
+    }
+
+    @Transactional
+    Set<Long> deleteResourceAndMetadata(Set<Long> ids) {
+        var deletedResources = repository.deleteByIdIn(ids);
+
+        var idsAsQueryParam = ids.stream().map(Object::toString).collect(Collectors.joining(","));
+
+        var response = RestClient.create().delete()
+                .uri(String.format("%s?id=%s", songServiceUrl, idsAsQueryParam))
+                .retrieve()
+                .toBodilessEntity();
+
+        if (!HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new ResourceSimpleException(400, String.format("Failed to save resource metadata for IDs %s", idsAsQueryParam));
+        }
+
+        return deletedResources.stream()
+                .map(ResourceDto::getId)
+                .collect(Collectors.toSet());
     }
 }
