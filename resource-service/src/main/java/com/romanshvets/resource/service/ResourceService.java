@@ -103,14 +103,14 @@ public class ResourceService {
 
         var songMetadata = convertMetadataToParams(resource.getId(), metadata);
 
-        var response = RestClient.create().post()
-                .uri(songServiceUrl)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(songMetadata)
-                .retrieve()
-                .toBodilessEntity();
-
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
+        try {
+            RestClient.create().post()
+                    .uri(songServiceUrl)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(songMetadata)
+                    .retrieve()
+                    .toBodilessEntity();
+        } catch (Exception e) {
             throw new ResourceSimpleException(400, String.format("Failed to save resource metadata for ID %s", resource.getId()));
         }
 
@@ -123,12 +123,12 @@ public class ResourceService {
 
         var idsAsQueryParam = ids.stream().map(Object::toString).collect(Collectors.joining(","));
 
-        var response = RestClient.create().delete()
-                .uri(String.format("%s?id=%s", songServiceUrl, idsAsQueryParam))
-                .retrieve()
-                .toBodilessEntity();
-
-        if (!HttpStatus.OK.equals(response.getStatusCode())) {
+        try {
+            RestClient.create().delete()
+                    .uri(String.format("%s?id=%s", songServiceUrl, idsAsQueryParam))
+                    .retrieve()
+                    .toBodilessEntity();
+        } catch (Exception e) {
             throw new ResourceSimpleException(400, String.format("Failed to save resource metadata for IDs %s", idsAsQueryParam));
         }
 
