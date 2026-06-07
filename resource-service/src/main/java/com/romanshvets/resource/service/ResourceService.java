@@ -11,7 +11,6 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.mp3.Mp3Parser;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -33,7 +32,7 @@ public class ResourceService {
 
     private final ResourceRepository repository;
 
-    @Value("${song.service.url}")
+    @Value("${SONG_SERVICE_URL}")
     private String songServiceUrl;
 
     @Transactional

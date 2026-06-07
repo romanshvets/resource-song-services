@@ -29,3 +29,7 @@ dependencies {
 
     runtimeOnly 'org.postgresql:postgresql'
 }
+
+bootRun {
+    environment 'SONG_SERVICE_URL', gradle.songServiceUrl
+}
