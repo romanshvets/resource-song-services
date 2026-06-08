@@ -1,9 +1,10 @@
 package com.romanshvets.song.service;
 
-import com.romanshvets.song.exception.SongSimpleException;
-import com.romanshvets.song.exception.SongValidationException;
-import com.romanshvets.song.model.SongDto;
+import com.romanshvets.song.config.exception.SongSimpleException;
+import com.romanshvets.song.config.exception.SongValidationException;
+import com.romanshvets.song.repository.model.SongEntity;
 import com.romanshvets.song.repository.SongRepository;
+import com.romanshvets.song.service.model.SongDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
@@ -28,7 +29,7 @@ public class SongService {
             throw new SongValidationException(400, "Validation error", validationErrors);
         }
 
-        var song = mapper.convertValue(params, SongDto.class);
+        var song = mapper.convertValue(params, SongEntity.class);
 
         var persistedSong = repository.findById(song.getId());
         if (persistedSong.isPresent()) {
@@ -50,7 +51,7 @@ public class SongService {
             throw new SongSimpleException(404, String.format("Song metadata for ID=%s not found", idParam));
         }
 
-        return song.get();
+        return convertSongEntityToDto(song.get());
     }
 
     public Set<Long> deleteSongs(String ids) {
@@ -65,6 +66,17 @@ public class SongService {
 
         return repository.deleteByIdIn(idsToDelete)
                 .stream()
-                .map(SongDto::getId).collect(Collectors.toSet());
+                .map(SongEntity::getId).collect(Collectors.toSet());
+    }
+
+    private SongDto convertSongEntityToDto(SongEntity entity) {
+        var dto = new SongDto();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setArtist(entity.getArtist());
+        dto.setAlbum(entity.getAlbum());
+        dto.setDuration(entity.getDuration());
+        dto.setYear(entity.getYear());
+        return dto;
     }
 }

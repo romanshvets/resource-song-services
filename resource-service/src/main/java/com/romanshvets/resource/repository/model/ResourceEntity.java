@@ -1,4 +1,4 @@
-package com.romanshvets.resource.model;
+package com.romanshvets.resource.repository.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Entity(name = "resource")
-public class ResourceDto {
+public class ResourceEntity {
 
     @Id
     @GeneratedValue

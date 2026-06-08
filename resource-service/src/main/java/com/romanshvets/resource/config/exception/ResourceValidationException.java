@@ -1,4 +1,4 @@
-package com.romanshvets.resource.exception;
+package com.romanshvets.resource.config.exception;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

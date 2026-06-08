@@ -1,4 +1,4 @@
-package com.romanshvets.song.exception;
+package com.romanshvets.song.config.exception;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -2,13 +2,7 @@ package com.romanshvets.resource.utils;
 
 import org.apache.tika.Tika;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoField;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ResourceValidationUtils {

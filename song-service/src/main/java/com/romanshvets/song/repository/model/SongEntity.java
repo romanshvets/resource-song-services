@@ -1,4 +1,4 @@
-package com.romanshvets.song.model;
+package com.romanshvets.song.repository.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Entity(name = "song")
-public class SongDto {
+public class SongEntity {
     @Id
     private Long id;
 

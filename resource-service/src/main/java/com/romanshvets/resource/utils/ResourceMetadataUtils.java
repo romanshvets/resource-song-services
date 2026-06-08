@@ -2,7 +2,6 @@ package com.romanshvets.resource.utils;
 
 import org.apache.tika.metadata.Metadata;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package com.romanshvets.resource.exception;
+package com.romanshvets.resource.config.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

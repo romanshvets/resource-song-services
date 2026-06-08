@@ -1,7 +1,7 @@
 package com.romanshvets.song.controller;
 
-import com.romanshvets.song.model.SongDto;
 import com.romanshvets.song.service.SongService;
+import com.romanshvets.song.service.model.SongDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

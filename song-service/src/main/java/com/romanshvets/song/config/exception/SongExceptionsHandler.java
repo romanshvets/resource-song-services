@@ -1,4 +1,4 @@
-package com.romanshvets.song.exception;
+package com.romanshvets.song.config.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

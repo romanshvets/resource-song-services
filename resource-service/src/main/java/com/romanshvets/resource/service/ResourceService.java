@@ -1,7 +1,7 @@
 package com.romanshvets.resource.service;
 
-import com.romanshvets.resource.exception.ResourceSimpleException;
-import com.romanshvets.resource.model.ResourceDto;
+import com.romanshvets.resource.config.exception.ResourceSimpleException;
+import com.romanshvets.resource.repository.model.ResourceEntity;
 import com.romanshvets.resource.repository.ResourceRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -95,7 +95,7 @@ public class ResourceService {
 
     @Transactional
     Long saveResourceAndMetadata(byte[] content, Metadata metadata) {
-        var resource = new ResourceDto();
+        var resource = new ResourceEntity();
         resource.setContent(content);
 
         repository.save(resource);
@@ -132,7 +132,7 @@ public class ResourceService {
         }
 
         return deletedResources.stream()
-                .map(ResourceDto::getId)
+                .map(ResourceEntity::getId)
                 .collect(Collectors.toSet());
     }
 }
