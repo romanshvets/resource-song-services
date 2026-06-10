@@ -31,5 +31,7 @@ dependencies {
 }
 
 bootRun {
-    environment 'SONG_SERVICE_URL', gradle.songServiceUrl
+    if (gradle.hasProperty('songServiceUrl')) {
+        environment 'SONG_SERVICE_URL', gradle.songServiceUrl
+    }
 }

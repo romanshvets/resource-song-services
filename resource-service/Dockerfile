@@ -1,13 +1,13 @@
 # BUILD STAGE
-FROM gradle:jdk17-alpine AS song-service-build
+FROM gradle:jdk17-alpine AS resource-service-build
 
 WORKDIR /app
 
-COPY gradlew song-service/build.gradle ./
+COPY gradlew resource-service/build.gradle ./
 COPY gradle ./gradle
 RUN ["./gradlew", "dependencies", "--no-daemon"]
 
-COPY song-service/src ./src
+COPY resource-service/src ./src
 RUN ["./gradlew", "assemble", "--no-daemon"]
 
 # RUNTIME STAGE
@@ -15,8 +15,8 @@ FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-COPY --from=song-service-build --exclude=*-plain.jar /app/build/libs/*.jar ./app.jar
+COPY --from=resource-service-build --exclude=*-plain.jar /app/build/libs/*.jar ./app.jar
 
-EXPOSE 8085
+EXPOSE 8080
 
 CMD ["java", "-jar", "./app.jar"]

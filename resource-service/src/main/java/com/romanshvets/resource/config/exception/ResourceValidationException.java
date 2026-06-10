@@ -9,7 +9,7 @@ import java.util.Map;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-public class ResourceValidationException extends ResourceSimpleException {
+public class ResourceValidationException extends ResourceGenericException {
 
     private final Map<String, String> details;
 

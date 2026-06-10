@@ -5,12 +5,12 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SongSimpleException extends RuntimeException {
+public class SongGenericException extends RuntimeException {
 
     private final int errorCode;
     private final String errorMessage;
 
-    public SongSimpleException(int errorCode, String errorMessage) {
+    public SongGenericException(int errorCode, String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }

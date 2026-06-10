@@ -25,8 +25,8 @@ public class ResourceExceptionsHandler {
                 .body(body);
     }
 
-    @ExceptionHandler(ResourceSimpleException.class)
-    public ResponseEntity<Map<String, Object>> handleSimpleException(ResourceSimpleException e) {
+    @ExceptionHandler(ResourceGenericException.class)
+    public ResponseEntity<Map<String, Object>> handleSimpleException(ResourceGenericException e) {
         Map<String, Object> body = Map.of(
                 "errorCode", Integer.toString(e.getErrorCode()),
                 "errorMessage", e.getErrorMessage()

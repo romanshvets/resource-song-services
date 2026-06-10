@@ -1,6 +1,6 @@
 package com.romanshvets.resource.service;
 
-import com.romanshvets.resource.config.exception.ResourceSimpleException;
+import com.romanshvets.resource.config.exception.ResourceGenericException;
 import com.romanshvets.resource.repository.model.ResourceEntity;
 import com.romanshvets.resource.repository.ResourceRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,7 +39,7 @@ public class ResourceService {
     public Long createResource(HttpServletRequest request) {
         var contentTypeError = validateContentType(request.getContentType());
         if (contentTypeError != null) {
-            throw new ResourceSimpleException(400, contentTypeError);
+            throw new ResourceGenericException(400, contentTypeError);
         }
 
         byte[] content;
@@ -52,7 +52,7 @@ public class ResourceService {
 
         var fileTypeError = validateStreamIsMP3(content);
         if (fileTypeError != null) {
-            throw new ResourceSimpleException(400, fileTypeError);
+            throw new ResourceGenericException(400, fileTypeError);
         }
 
         Metadata metadata = new Metadata();
@@ -68,12 +68,12 @@ public class ResourceService {
 
     public byte[] getResource(String idParam) {
         if (!validateIdParam(idParam)) {
-            throw new ResourceSimpleException(400, String.format("Invalid value '%s' for ID. Must be a positive integer", idParam));
+            throw new ResourceGenericException(400, String.format("Invalid value '%s' for ID. Must be a positive integer", idParam));
         }
 
         var resource = repository.findById(Long.parseLong(idParam));
         if (resource.isEmpty()) {
-            throw new ResourceSimpleException(404, String.format("Resource with ID=%s not found", idParam));
+            throw new ResourceGenericException(404, String.format("Resource with ID=%s not found", idParam));
         }
 
         return resource.get().getContent();
@@ -83,7 +83,7 @@ public class ResourceService {
     public Set<Long> deleteResources(String ids) {
         var validationError = validateIdsParam(ids);
         if (validationError != null) {
-            throw new ResourceSimpleException(400, validationError);
+            throw new ResourceGenericException(400, validationError);
         }
 
         var idsToDelete = Arrays.stream(ids.split(","))
@@ -110,7 +110,7 @@ public class ResourceService {
                     .retrieve()
                     .toBodilessEntity();
         } catch (Exception e) {
-            throw new ResourceSimpleException(400, String.format("Failed to save resource metadata for ID %s", resource.getId()));
+            throw new ResourceGenericException(400, String.format("Failed to save resource metadata for ID %s", resource.getId()));
         }
 
         return resource.getId();
@@ -128,7 +128,7 @@ public class ResourceService {
                     .retrieve()
                     .toBodilessEntity();
         } catch (Exception e) {
-            throw new ResourceSimpleException(400, String.format("Failed to save resource metadata for IDs %s", idsAsQueryParam));
+            throw new ResourceGenericException(400, String.format("Failed to save resource metadata for IDs %s", idsAsQueryParam));
         }
 
         return deletedResources.stream()

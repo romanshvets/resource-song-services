@@ -25,8 +25,8 @@ public class SongExceptionsHandler {
                 .body(body);
     }
 
-    @ExceptionHandler(SongSimpleException.class)
-    public ResponseEntity<Map<String, Object>> handleSimpleException(SongSimpleException e) {
+    @ExceptionHandler(SongGenericException.class)
+    public ResponseEntity<Map<String, Object>> handleSimpleException(SongGenericException e) {
         Map<String, Object> body = Map.of(
                 "errorCode", Integer.toString(e.getErrorCode()),
                 "errorMessage", e.getErrorMessage()

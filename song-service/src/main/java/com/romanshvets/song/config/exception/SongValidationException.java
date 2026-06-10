@@ -9,7 +9,7 @@ import java.util.Map;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-public class SongValidationException extends SongSimpleException {
+public class SongValidationException extends SongGenericException {
 
     private final Map<String, String> details;
 

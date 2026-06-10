@@ -1,6 +1,6 @@
 package com.romanshvets.song.service;
 
-import com.romanshvets.song.config.exception.SongSimpleException;
+import com.romanshvets.song.config.exception.SongGenericException;
 import com.romanshvets.song.config.exception.SongValidationException;
 import com.romanshvets.song.repository.model.SongEntity;
 import com.romanshvets.song.repository.SongRepository;
@@ -33,7 +33,7 @@ public class SongService {
 
         var persistedSong = repository.findById(song.getId());
         if (persistedSong.isPresent()) {
-            throw new SongSimpleException(409, String.format("Metadata for resource ID=%s already exists", song.getId()));
+            throw new SongGenericException(409, String.format("Metadata for resource ID=%s already exists", song.getId()));
         }
 
         repository.save(song);
@@ -43,12 +43,12 @@ public class SongService {
 
     public SongDto getSong(String idParam) {
         if (!validateIdParam(idParam)) {
-            throw new SongSimpleException(400, String.format("Invalid value '%s' for ID. Must be a positive integer", idParam));
+            throw new SongGenericException(400, String.format("Invalid value '%s' for ID. Must be a positive integer", idParam));
         }
 
         var song = repository.findById(Long.parseLong(idParam));
         if (song.isEmpty()) {
-            throw new SongSimpleException(404, String.format("Song metadata for ID=%s not found", idParam));
+            throw new SongGenericException(404, String.format("Song metadata for ID=%s not found", idParam));
         }
 
         return convertSongEntityToDto(song.get());
@@ -57,7 +57,7 @@ public class SongService {
     public Set<Long> deleteSongs(String ids) {
         var validationError = validateIdsParam(ids);
         if (validationError != null) {
-            throw new SongSimpleException(400, validationError);
+            throw new SongGenericException(400, validationError);
         }
 
         var idsToDelete = Arrays.stream(ids.split(","))
