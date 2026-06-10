@@ -6,16 +6,29 @@ services:
       POSTGRES_USER: ${RESOURCE_DB_USER}
       POSTGRES_PASSWORD: ${RESOURCE_DB_PASSWORD}
     ports:
-      - "${RESOURCE_DB_PORT}:5432"  # Maps container port 5432 to host port 5432
+      - "${RESOURCE_DB_PORT}:5432"
 
   song-db:
     image: postgres:17-alpine
     environment:
-      POSTGRES_DB: song-db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${SONG_DB_NAME}
+      POSTGRES_USER: ${SONG_DB_USER}
+      POSTGRES_PASSWORD: ${SONG_DB_PASSWORD}
     ports:
-      - "5433:5432"  # Maps container port 5432 to host port 5433 (to avoid conflict)
+      - "${SONG_DB_PORT}:5432"
+    volumes:
+      - ./init-scripts/song-db/:/docker-entrypoint-initdb.d/
+
+  song-service:
+    build:
+      context: .
+      dockerfile: ./song-service/Dockerfile
+
+
+
+
+
+#        ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
 # Related settings for application.properties:
 #
