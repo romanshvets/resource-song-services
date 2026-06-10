@@ -2,11 +2,11 @@ services:
   resource-db:
     image: postgres:17-alpine
     environment:
-      POSTGRES_DB: resource-db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${RESOURCE_DB_NAME}
+      POSTGRES_USER: ${RESOURCE_DB_USER}
+      POSTGRES_PASSWORD: ${RESOURCE_DB_PASSWORD}
     ports:
-      - "5432:5432"  # Maps container port 5432 to host port 5432
+      - "${RESOURCE_DB_PORT}:5432"  # Maps container port 5432 to host port 5432
 
   song-db:
     image: postgres:17-alpine
