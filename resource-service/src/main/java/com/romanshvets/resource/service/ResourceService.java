@@ -32,7 +32,7 @@ public class ResourceService {
 
     private final ResourceRepository repository;
 
-    @Value("${SONG_SERVICE_URL}")
+    @Value("${song.service.url}")
     private String songServiceUrl;
 
     @Transactional

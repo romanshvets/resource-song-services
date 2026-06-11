@@ -1,12 +1,21 @@
 services:
+
   resource-db:
     image: postgres:17-alpine
     environment:
       POSTGRES_DB: ${RESOURCE_DB_NAME}
       POSTGRES_USER: ${RESOURCE_DB_USER}
       POSTGRES_PASSWORD: ${RESOURCE_DB_PASSWORD}
+      PGPORT: ${RESOURCE_DB_PORT}
     ports:
-      - "${RESOURCE_DB_PORT}:5432"
+      - "${RESOURCE_DB_PORT}:${RESOURCE_DB_PORT}"
+    volumes:
+      - ./init-scripts/resource-db/:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${RESOURCE_DB_USER}" ]
+      interval: 1s
+      timeout: 1s
+      retries: 5
 
   song-db:
     image: postgres:17-alpine
@@ -14,30 +23,42 @@ services:
       POSTGRES_DB: ${SONG_DB_NAME}
       POSTGRES_USER: ${SONG_DB_USER}
       POSTGRES_PASSWORD: ${SONG_DB_PASSWORD}
+      PGPORT: ${SONG_DB_PORT}
     ports:
-      - "${SONG_DB_PORT}:5432"
+      - "${SONG_DB_PORT}:${SONG_DB_PORT}"
     volumes:
       - ./init-scripts/song-db/:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${SONG_DB_USER}" ]
+      interval: 1s
+      timeout: 1s
+      retries: 5
+
+  resource-service:
+    build:
+      context: .
+      dockerfile: ./resource-service/Dockerfile
+    depends_on:
+      resource-db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: ${RESOURCE_SERVICE_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${RESOURCE_DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${RESOURCE_DB_PASSWORD}
+      SONG_SERVICE_URL: ${SONG_SERVICE_URL}
 
   song-service:
     build:
       context: .
       dockerfile: ./song-service/Dockerfile
-
-
-
-
-
-#        ./init.sql:/docker-entrypoint-initdb.d/init.sql
-
-# Related settings for application.properties:
-#
-# For resource-service:
-# spring.datasource.url=jdbc:postgresql://localhost:5432/resource-db
-# spring.datasource.username=postgres
-# spring.datasource.password=postgres
-#
-# For song-service:
-# spring.datasource.url=jdbc:postgresql://localhost:5433/song-db
-# spring.datasource.username=postgres
-# spring.datasource.password=postgres
+    depends_on:
+      song-db:
+        condition: service_healthy
+    ports:
+      - "${SONG_SERVICE_PORT}:${SONG_SERVICE_PORT}"
+    environment:
+      SPRING_DATASOURCE_URL: ${SONG_SERVICE_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SONG_DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${SONG_DB_PASSWORD}
