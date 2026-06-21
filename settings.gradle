@@ -1,5 +1,7 @@
 rootProject.name = 'resource-song-services'
 
+include('eureka-service')
+include('gateway-service')
 include('resource-service')
 include('song-service')
 

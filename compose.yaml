@@ -42,7 +42,7 @@ services:
       resource-db:
         condition: service_healthy
     ports:
-      - "8080:8080"
+      - "${RESOURCE_SERVICE_PORT}:${RESOURCE_SERVICE_PORT}"
     environment:
       SPRING_DATASOURCE_URL: ${RESOURCE_SERVICE_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${RESOURCE_DB_USER}

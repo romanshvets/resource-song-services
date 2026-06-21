@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: resource-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/resource-db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+  servlet:
+    encoding:
+      enabled: false
+
+server:
+  port: 8080
+
+song:
+  service:
+    url: "${SONG_SERVICE_URL}"

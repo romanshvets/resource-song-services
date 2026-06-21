@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: eureka-service
+
+server:
+  port: 8761
+
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 5
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    registry-fetch-interval-seconds: 5
+
+logging:
+  level:
+    com.netflix.eureka: OFF
+    com.netflix.discovery: OFF
