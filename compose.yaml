@@ -45,7 +45,7 @@ services:
       interval: 1s
       timeout: 3s
       retries: 10
-      
+
   gateway-service:
     build:
       context: .
